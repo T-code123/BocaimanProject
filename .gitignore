@@ -1,0 +1,14 @@
+# Project exclude paths
+/bocaiman-agency-consumer/target/
+/bocaiman-agency-provider/target/
+/bocaiman-bus-consumer/target/
+/bocaiman-bus-provider/target/
+/bocaiman-commons/target/
+/bocaiman-data-commons/target/
+/bocaiman-order-consumer/target/
+/bocaiman-order-provider/target/
+/bocaiman-register/target/
+/bocaiman-system-consumer/target/
+/bocaiman-system-provider/target/
+/bocaiman-trade-consumer/target/
+/bocaiman-trade-provider/target/

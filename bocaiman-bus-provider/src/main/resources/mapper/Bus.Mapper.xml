@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.BusDao">
+	<select id="findListByQuery" parameterType="Bus" resultMap="resultMap">
+		select
+			sb.id,
+			sb.seat,
+			sbds.name seatName,
+			sb.category,
+			sbdc.name categoryName,
+			sb.brand,
+			sbdb.name brandName,
+			sb.no,
+			sb.engineNo,
+			sb.vin,
+			sb.drivingLicence,
+			sb.drivingLicenceImage,
+			sb.color,
+			sb.purchaseDate,
+			sb.image,
+			sb.busStatus,
+			sb.status,
+			sbs.text busStatusText,
+			sbs.code busStatusCode,
+			sb.createAdmin,
+			sb.createTime,
+			sb.updateAdmin,
+			sb.updateTime
+		from
+			sys_bus sb join sys_bus_dic sbds on sb.seat=sbds.id
+			join sys_bus_dic sbdc on sb.category=sbdc.id
+			join sys_bus_dic sbdb on sb.brand=sbdb.id
+			join sys_bus_status sbs on sb.busStatus=sbs.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sb.id=#{id} and </if>
+				<if test="seat != null and seat.id != null">sb.seat=#{seat.id} and </if>
+				<if test="category != null and category.id != null">sb.category=#{category.id} and </if>
+				<if test="brand != null and brand.id != null">sb.brand=#{brand.id} and </if>
+				<if test="no != null">sb.no=#{no} and </if>
+				<if test="busStatus != null and busStatus.id != null">sb.busStatus=#{busStatus.id} and </if>
+				<if test="busStatus != null and busStatus.text != null">sbs.text like concat('%', #{busStatus.text}, '%') and </if>
+				<if test="busStatus != null and busStatus.code != null">sbs.code=#{busStatus.code} and </if>
+				<if test="status != null">sb.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Bus">
+		insert into sys_bus(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="seat != null and seat.id != null">seat, </if>
+				<if test="category != null and category.id != null">category, </if>
+				<if test="brand != null and brand.id != null">brand, </if>
+				<if test="no != null">no, </if>
+				<if test="engineNo != null">engineNo, </if>
+				<if test="vin != null">vin, </if>
+				<if test="drivingLicence != null">drivingLicence, </if>
+				<if test="drivingLicenceImage != null">drivingLicenceImage, </if>
+				<if test="color != null">color, </if>
+				<if test="purchaseDate != null">purchaseDate, </if>
+				<if test="image != null">image, </if>
+				<if test="busStatus != null and busStatus.id != null">busStatus, </if>
+				<if test="status != null">status, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="seat != null and seat.id != null">#{seat.id}, </if>
+				<if test="category != null and category.id != null">#{category.id}, </if>
+				<if test="brand != null and brand.id != null">#{brand.id}, </if>
+				<if test="no != null">#{no}, </if>
+				<if test="engineNo != null">#{engineNo}, </if>
+				<if test="vin != null">#{vin}, </if>
+				<if test="drivingLicence != null">#{drivingLicence}, </if>
+				<if test="drivingLicenceImage != null">#{drivingLicenceImage}, </if>
+				<if test="color != null">#{color}, </if>
+				<if test="purchaseDate != null">#{purchaseDate}, </if>
+				<if test="image != null">#{image}, </if>
+				<if test="busStatus != null and busStatus.id != null">#{busStatus.id}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="Bus">
+		update sys_bus
+		<set>
+			<trim suffixOverrides=",">
+				<if test="seat != null and seat.id != null">seat=#{seat.id}, </if>
+				<if test="category != null and category.id != null">category=#{categoryseat.id}, </if>
+				<if test="brand != null and brand.id != null">brand=#{brandseat.id}, </if>
+				<if test="no != null">no=#{no}, </if>
+				<if test="engineNo != null">engineNo=#{engineNo}, </if>
+				<if test="vin != null">vin=#{vin}, </if>
+				<if test="drivingLicence != null">drivingLicence=#{drivingLicence}, </if>
+				<if test="drivingLicenceImage != null">drivingLicenceImage=#{drivingLicenceImage}, </if>
+				<if test="color != null">color=#{color}, </if>
+				<if test="purchaseDate != null">purchaseDate=#{purchaseDate}, </if>
+				<if test="image != null">image=#{image}, </if>
+				<if test="busStatus != null and busStatus.id != null">busStatus=#{busStatusseat.id}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+				<if test="no != null">no=#{no} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="Bus">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="no" javaType="java.lang.String" column="no"/>
+		<result property="engineNo" javaType="java.lang.String" column="engineNo"/>
+		<result property="vin" javaType="java.lang.String" column="vin"/>
+		<result property="drivingLicence" javaType="java.lang.String" column="drivingLicence"/>
+		<result property="drivingLicenceImage" javaType="java.lang.String" column="drivingLicenceImage"/>
+		<result property="color" javaType="java.lang.String" column="color"/>
+		<result property="purchaseDate" javaType="java.util.Date" column="purchaseDate"/>
+		<result property="image" javaType="java.lang.String" column="image"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="seat" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="seat"/>
+			<result property="name" javaType="java.lang.String" column="seatName"/>
+		</association>
+		<association property="category" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="category"/>
+			<result property="name" javaType="java.lang.String" column="categoryName"/>
+		</association>
+		<association property="brand" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="brand"/>
+			<result property="name" javaType="java.lang.String" column="brandName"/>
+		</association>
+		<association property="busStatus" javaType="BusStatus">
+			<id property="id" javaType="java.lang.String" column="busStatus"/>
+			<result property="text" javaType="java.lang.String" column="busStatusText"/>
+			<result property="code" javaType="java.lang.String" column="busStatusCode"/>
+		</association>
+	</resultMap>
+</mapper>

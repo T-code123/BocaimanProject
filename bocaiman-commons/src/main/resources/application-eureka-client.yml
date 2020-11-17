@@ -1,0 +1,8 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+### Eureka Client 连接注册中心信息
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka/

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.TravelAgencyDao">
+	<select id="findListByQuery" parameterType="TravelAgency" resultMap="resultMap">
+		select
+			st.id,
+			st.name,
+			st.travelLicence,
+			st.travelLicenceImage,
+			st.uscc,
+			st.legalRep,
+			st.legalRepIdCard,
+			st.legalRepIdCardImage,
+			st.businessLicence,
+			st.businessLicenceImage,
+			st.cellphone,
+			st.password,
+			st.point,
+			st.auditStatus,
+			sa.text auditStatusText,
+			sa.code auditStatusCode,
+			st.auditAdmin,
+			sn.name auditAdminName,
+			st.auditDate,
+			st.status,
+			st.createTime,
+			st.updateTime
+		from
+			sys_travel_agency st join sys_audit_status sa on st.auditStatus=sa.id
+			join sys_admin sn on st.auditAdmin=sn.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">st.id=#{id} and </if>
+				<if test="name != null">st.name like concat('%', #{name}, '%') and </if>
+				<if test="cellphone != null">st.cellphone=#{cellphone} and </if>
+				<if test="password != null">st.password=#{password} and </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">st.auditAdmin=#{auditAdmin.id} and </if>
+				<if test="auditStatus != null and auditStatus.id != null">st.auditStatus=#{auditStatus.id} and </if>
+				<if test="auditStatus != null and auditStatus.text != null">sa.text like concat('%', #{auditStatus.text}, '%') and </if>
+				<if test="auditStatus != null and auditStatus.code != null">sa.code=#{auditStatus.code} and </if>
+				<if test="status != null">st.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="TravelAgency">
+		insert into sys_travel_agency(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="name != null">name, </if>
+				<if test="travelLicence != null">travelLicence, </if>
+				<if test="travelLicenceImage != null">travelLicenceImage, </if>
+				<if test="uscc != null">uscc, </if>
+				<if test="legalRep != null">legalRep, </if>
+				<if test="legalRepIdCard != null">legalRepIdCard, </if>
+				<if test="legalRepIdCardImage != null">legalRepIdCardImage, </if>
+				<if test="businessLicence != null">businessLicence, </if>
+				<if test="businessLicenceImage != null">businessLicenceImage, </if>
+				<if test="cellphone != null">cellphone, </if>
+				<if test="password != null">password, </if>
+				<if test="point != null">point, </if>
+				<if test="auditStatus != null and auditStatus.id != null">auditStatus, </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">auditAdmin, </if>
+				<if test="auditDate != null">auditDate, </if>
+				<if test="status != null">status, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="name != null">#{name}, </if>
+				<if test="travelLicence != null">#{travelLicence}, </if>
+				<if test="travelLicenceImage != null">#{travelLicenceImage}, </if>
+				<if test="uscc != null">#{uscc}, </if>
+				<if test="legalRep != null">#{legalRep}, </if>
+				<if test="legalRepIdCard != null">#{legalRepIdCard}, </if>
+				<if test="legalRepIdCardImage != null">#{legalRepIdCardImage}, </if>
+				<if test="businessLicence != null">#{businessLicence}, </if>
+				<if test="businessLicenceImage != null">#{businessLicenceImage}, </if>
+				<if test="cellphone != null">#{cellphone}, </if>
+				<if test="password != null">#{password}, </if>
+				<if test="point != null">#{point}, </if>
+				<if test="auditStatus != null and auditStatus.id != null">#{auditStatus.id}, </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">#{auditAdmin.id}, </if>
+				<if test="auditDate != null">#{auditDate}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="TravelAgency">
+		update sys_travel_agency
+		<set>
+			<trim suffixOverrides=",">
+				<if test="name != null">name=#{name}, </if>
+				<if test="travelLicence != null">travelLicence=#{travelLicence}, </if>
+				<if test="travelLicenceImage != null">travelLicenceImage=#{travelLicenceImage}, </if>
+				<if test="uscc != null">uscc=#{uscc}, </if>
+				<if test="legalRep != null">legalRep=#{legalRep}, </if>
+				<if test="legalRepIdCard != null">legalRepIdCard=#{legalRepIdCard}, </if>
+				<if test="legalRepIdCardImage != null">legalRepIdCardImage=#{legalRepIdCardImage}, </if>
+				<if test="businessLicence != null">businessLicence=#{businessLicence}, </if>
+				<if test="businessLicenceImage != null">businessLicenceImage=#{businessLicenceImage}, </if>
+				<if test="cellphone != null">cellphone=#{cellphone}, </if>
+				<if test="password != null">password=#{password}, </if>
+				<if test="point != null">point=#{point}, </if>
+				<if test="auditStatus != null and auditStatus.id != null">auditStatus=#{auditStatus.id}, </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">auditAdmin=#{auditAdmin.id}, </if>
+				<if test="auditDate != null">auditDate=#{auditDate}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+			</trim>
+		</where>
+	</update>
+	<resultMap id="resultMap" type="TravelAgency">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="name" javaType="java.lang.String" column="name"/>
+		<result property="travelLicence" javaType="java.lang.String" column="travelLicence"/>
+		<result property="travelLicenceImage" javaType="java.lang.String" column="travelLicenceImage"/>
+		<result property="uscc" javaType="java.lang.String" column="uscc"/>
+		<result property="legalRep" javaType="java.lang.String" column="legalRep"/>
+		<result property="legalRepIdCard" javaType="java.lang.String" column="legalRepIdCard"/>
+		<result property="legalRepIdCardImage" javaType="java.lang.String" column="legalRepIdCardImage"/>
+		<result property="businessLicence" javaType="java.lang.String" column="businessLicence"/>
+		<result property="businessLicenceImage" javaType="java.lang.String" column="businessLicenceImage"/>
+		<result property="cellphone" javaType="java.lang.String" column="cellphone"/>
+		<result property="password" javaType="java.lang.String" column="password"/>
+		<result property="point" javaType="java.lang.Integer" column="point"/>
+		<result property="auditDate" javaType="java.util.Date" column="auditDate"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="auditAdmin" javaType="Admin">
+			<id property="id" javaType="java.lang.String" column="auditAdmin"/>
+			<result property="name" javaType="java.lang.String" column="auditAdminName"/>
+		</association>
+		<association property="auditStatus" javaType="AuditStatus">
+			<id property="id" javaType="java.lang.String" column="auditStatus"/>
+			<result property="text" javaType="java.lang.String" column="auditStatusText"/>
+			<result property="code" javaType="java.lang.String" column="auditStatusCode"/>
+		</association>
+	</resultMap>
+</mapper>

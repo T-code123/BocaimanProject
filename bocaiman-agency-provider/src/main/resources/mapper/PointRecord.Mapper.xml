@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.PointRecordDao">
+	<select id="findListByQuery" parameterType="PointRecord" resultMap="resultMap">
+		select
+			sp.id,
+			sp.travelAgency,
+			st.name travelAgencyName,
+			sp.orderNo,
+			sp.usePoint,
+			sp.pointUseType,
+			su.text pointUseTypeText,
+			su.code pointUseTypeCode,
+			sp.currentTotalPoint,
+			sp.status,
+			sp.createTime,
+			sp.updateTime
+		from
+			sys_point_record sp join sys_travel_agency st on sp.travelAgency=st.id
+			join sys_point_use_type su on sp.pointUseType=su.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sp.id=#{id} and </if>
+				<if test="travelAgency != null and travelAgency.id != null">sp.travelAgency=#{travelAgency.id} and </if>
+				<if test="orderNo != null">sp.orderNo=#{orderNo} and </if>
+				<if test="pointUseType != null and pointUseType.code != null">su.code=#{pointUseType.code} and </if>
+				<if test="pointUseType != null and pointUseType.text != null">su.text like concat('%', #{pointUseType.text}, '%') and </if>
+				<if test="status != null">sp.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="PointRecord">
+		insert into sys_point_record(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="travelAgency != null and travelAgency.id != null">travelAgency, </if>
+				<if test="orderNo != null">orderNo, </if>
+				<if test="usePoint != null">usePoint, </if>
+				<if test="pointUseType != null and pointUseType.id != null">pointUseType, </if>
+				<if test="currentTotalPoint != null">currentTotalPoint, </if>
+				<if test="status != null">status, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="travelAgency != null and travelAgency.id != null">#{travelAgency}, </if>
+				<if test="orderNo != null">#{orderNo}, </if>
+				<if test="usePoint != null">#{usePoint}, </if>
+				<if test="pointUseType != null and pointUseType.id != null">#{pointUseType}, </if>
+				<if test="currentTotalPoint != null">#{currentTotalPoint}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+
+	<resultMap id="resultMap" type="PointRecord">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="orderNo" javaType="java.lang.String" column="orderNo"/>
+		<result property="usePoint" javaType="java.lang.String" column="usePoint"/>
+		<result property="currentTotalPoint" javaType="java.lang.String" column="currentTotalPoint"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="travelAgency" javaType="TravelAgency">
+			<id property="id" javaType="java.lang.String" column="travelAgency"/>
+			<result property="name" javaType="java.lang.String" column="travelAgencyName"/>
+		</association>
+		<association property="pointUseType" javaType="PointUseType">
+			<id property="id" javaType="java.lang.String" column="pointUseType"/>
+			<result property="text" javaType="java.lang.String" column="pointUseTypeText"/>
+			<result property="code" javaType="java.lang.String" column="pointUseTypeCode"/>
+		</association>
+	</resultMap>
+</mapper>

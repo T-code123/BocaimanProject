@@ -1,0 +1,10 @@
+### 配置项目启动类
+server:
+  port: 8888
+### 配置项目应用名
+spring:
+  application:
+    name: bocaiman-trade-consumer
+  ### 加载所需要的配置文件
+  profiles:
+    active: eureka-client

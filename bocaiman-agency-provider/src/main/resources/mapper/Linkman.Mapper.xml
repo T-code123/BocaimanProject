@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.LinkmanDao">
+	<select id="findListByQuery" parameterType="Linkman" resultMap="resultMap">
+		select
+			sl.id,
+			sl.travelAgency,
+			st.name travelAgencyName,
+			sl.name,
+			sl.cellphone,
+			sl.idCard,
+			sl.idCardImage,
+			sl.auditStatus,
+			ss.text auditStatusText,
+			ss.code auditStatusCode,
+			sl.auditAdmin,
+			sa.name auditAdminName,
+			sl.auditDate,
+			sl.status,
+			sl.createTime,
+			sl.updateTime
+		from
+			sys_linkman sl join sys_travel_agency st on sl.travelAgency=st.id
+			join sys_audit_status ss on sl.auditStatus=ss.id
+			join sys_admin sa on sl.auditAdmin=sa.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sl.id=#{id} and </if>
+				<if test="travelAgency != null and travelAgency.id != null">sl.travelAgency=#{travelAgency.id} and </if>
+				<if test="name != null">sl.name like concat ('%', #{name}, '%') and </if>
+				<if test="cellphone != null">sl.cellphone=#{cellphone} and </if>
+				<if test="idCard != null">sl.idCard=#{idCard} and </if>
+				<if test="auditStatus != null and auditStatus.id != null">sl.auditStatus=#{auditStatus.id} and </if>
+				<if test="auditStatus != null and auditStatus.code != null">ss.code=#{auditStatus.code} and </if>
+				<if test="auditStatus != null and auditStatus.text != null">ss.text like concat('%', #{auditStatus.text}, '%') and </if>
+				<if test="status != null">sl.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Linkman">
+		insert into sys_linkman(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="travelAgency != null and travelAgency.id != null">travelAgency, </if>
+				<if test="name != null">name, </if>
+				<if test="cellphone != null">cellphone, </if>
+				<if test="idCard != null">idCard, </if>
+				<if test="idCardImage != null">idCardImage, </if>
+				<if test="auditStatus != null and auditStatus.id != null">auditStatus, </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">auditAdmin, </if>
+				<if test="auditDate != null ">auditDate, </if>
+				<if test="status != null">status, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="travelAgency != null and travelAgency.id != null">#{travelAgency}, </if>
+				<if test="name != null">#{name}, </if>
+				<if test="cellphone != null">#{cellphone}, </if>
+				<if test="idCard != null">#{idCard}, </if>
+				<if test="idCardImage != null">#{idCardImage}, </if>
+				<if test="auditStatus != null and auditStatus.id != null">#{auditStatus}, </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">#{auditAdmin}, </if>
+				<if test="auditDate != null ">#{auditDate}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="Linkman">
+		update sys_linkman
+		<set>
+			<trim suffixOverrides=",">
+				<if test="travelAgency != null and travelAgency.id != null">travelAgency=#{travelAgency}, </if>
+				<if test="name != null">name=#{name}, </if>
+				<if test="cellphone != null">cellphone=#{cellphone}, </if>
+				<if test="idCard != null">idCard=#{idCard}, </if>
+				<if test="idCardImage != null">idCardImage=#{idCardImage}, </if>
+				<if test="auditStatus != null and auditStatus.id != null">auditStatus=#{auditStatus}, </if>
+				<if test="auditAdmin != null and auditAdmin.id != null">auditAdmin=#{auditAdmin}, </if>
+				<if test="auditDate != null ">auditDate=#{auditDate}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="Linkman">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="name" javaType="java.lang.String" column="name"/>
+		<result property="cellphone" javaType="java.lang.String" column="cellphone"/>
+		<result property="idCard" javaType="java.lang.String" column="idCard"/>
+		<result property="idCardImage" javaType="java.lang.String" column="idCardImage"/>
+		<result property="auditDate" javaType="java.util.Date" column="auditDate"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="travelAgency" javaType="TravelAgency">
+			<id property="id" javaType="java.lang.String" column="travelAgency"/>
+			<result property="name" javaType="java.lang.String" column="travelAgencyName"/>
+		</association>
+		<association property="auditStatus" javaType="AuditStatus">
+			<id property="id" javaType="java.lang.String" column="auditStatus"/>
+			<result property="text" javaType="java.lang.String" column="auditStatusText"/>
+			<result property="code" javaType="java.lang.String" column="auditStatusCode"/>
+		</association>
+		<association property="auditAdmin" javaType="Admin">
+			<id property="id" javaType="java.lang.String" column="auditAdmin"/>
+			<result property="name" javaType="java.lang.String" column="auditAdminName"/>
+		</association>
+	</resultMap>
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.TradeDao">
+	<select id="findListByQuery" parameterType="Trade" resultMap="resultMap">
+		select
+			st.id,
+			st.tradeNo,
+			st.orderId,
+			so.orderNo,
+			st.amount,
+			st.paymentPlatform,
+			spp.platform,
+			st.status,
+			st.startTime,
+			st.endTime,
+			st.createTime,
+			st.updateTime
+		from
+			sys_trade st join sys_order so on st.orderId=so.id
+			join sys_paymentplatform spp on st.paymentPlatform=spp.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">st.id=#{id} and </if>
+				<if test="tradeNo != null">st.tradeNo=#{tradeNo} and </if>
+				<if test="order != null and order.id != null" >st.orderId=#{order.id} and </if>
+				<if test="order != null and order.orderNo != null" >so.orderNo=#{order.orderNo} and </if>
+				<if test="paymentPlatform != null and paymentPlatform.id != null" >st.paymentPlatform=#{paymentPlatform.id} and </if>
+				<if test="status != null">st.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Trade">
+		insert into sys_trade(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="tradeNo != null">tradeNo, </if>
+				<if test="orderId != null">orderId, </if>
+				<if test="amount != null">amount, </if>
+				<if test="paymentPlatform != null">paymentPlatform, </if>
+				<if test="startTime != null">startTime, </if>
+				<if test="endTime != null">endTime, </if>
+				<if test="status != null">status, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id}, </if>
+			<if test="tradeNo != null">#{tradeNo}, </if>
+			<if test="orderId != null">#{orderId}, </if>
+			<if test="amount != null">#{amount}, </if>
+			<if test="paymentPlatform != null">#{paymentPlatform}, </if>
+			<if test="startTime != null">#{startTime}, </if>
+			<if test="endTime != null">#{endTime}, </if>
+			<if test="status != null">#{status}, </if>
+			<if test="createTime != null">#{createTime}, </if>
+			<if test="updateTime != null">#{updateTime}, </if>
+		</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="Trade">
+		update sys_trade
+			<set>
+				<trim suffixOverrides=",">
+					<if test="tradeNo != null">tradeNo=#{tradeNo}, </if>
+					<if test="orderId != null">orderId=#{orderId}, </if>
+					<if test="amount != null">amount=#{amount}, </if>
+					<if test="paymentPlatform != null">paymentPlatform=#{paymentPlatform}, </if>
+					<if test="startTime != null">startTime=#{startTime}, </if>
+					<if test="endTime != null">endTime=#{endTime}, </if>
+					<if test="createTime != null">createTime=#{createTime}, </if>
+					<if test="updateTime != null">updateTime=#{updateTime}, </if>
+					<if test="status != null">status=#{status}, </if>
+				</trim>
+			</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+				<if test="tradeNo != null">tradeNo=#{tradeNo} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="Trade">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="tradeNo" javaType="java.lang.String" column="tradeNo"/>
+		<result property="amount" javaType="java.math.BigDecimal" column="amount"/>
+		<result property="startTime" javaType="java.util.Date" column="startTime"/>
+		<result property="endTime" javaType="java.util.Date" column="endTime"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<association property="order" javaType="Order">
+			<id property="id" javaType="java.lang.String" column="orderId"/>
+			<result property="orderNo" javaType="java.lang.String" column="orderNo"/>
+		</association>
+		<association property="paymentPlatform" javaType="PaymentPlatform">
+			<id property="id" javaType="java.lang.String" column="paymentPlatform"/>
+			<result property="platform" javaType="java.lang.String" column="platform"/>
+		</association>
+	</resultMap>
+</mapper>

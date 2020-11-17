@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.OrderRefundRecordDao">
+	<select id="findListByQuery" parameterType="OrderRefundRecord" resultMap="resultMap">
+		select
+			sc.id,
+			sc.orderId,
+			so.orderNo,
+			sc.reason,
+			sc.auditStatus,
+			ss.text auditStatusText,
+			ss.code auditStatusCode,
+			sc.auditAdmin,
+			sa.name auditAdminName,
+			sc.auditDate,
+			sc.status,
+			sc.createTime,
+			sc.updateTime
+		from
+			sys_order_refund_record sc join sys_order so on sc.orderId=so.id
+			join sys_audit_status ss on sc.auditStatus=ss.id
+			join sys_admin sa on sc.auditAdmin=sa.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sc.id=#{id} and </if>
+				<if test="order != null and order.id != null">sc.orderId=#{order.id} and </if>
+				<if test="order != null and order.orderNo!= null">sc.orderNo=#{order.orderNo} and </if>
+				<if test="auditStatus != null and auditStatus.id!= null">sc.auditStatus=#{auditStatus.id} and </if>
+				<if test="auditStatus != null and auditStatus.code != null">ss.code=#{auditStatus.code} and </if>
+				<if test="auditStatus != null and auditStatus.text != null">ss.text like concat('%', #{auditStatus.text}, '%') and </if>
+				<if test="status != null">sc.status=#{status} and</if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="OrderRefundRecord">
+		insert into sys_order_refund_record(
+		<trim suffixOverrides=",">
+			<if test="id != null">id, </if>
+			<if test="order != null and order.id != null">orderId, </if>
+			<if test="reason != null ">reason, </if>
+			<if test="auditStatus != null and auditStatus.id!= null">auditStatus, </if>
+			<if test="auditAdmin != null and auditAdmin.id!= null">auditAdmin, </if>
+			<if test="auditDate != null">auditDate, </if>
+			<if test="status != null">status, </if>
+			<if test="createTime != null">createTime, </if>
+			<if test="updateTime != null">updateTime, </if>
+		</trim>
+		) values(
+		<trim suffixOverrides=",">
+			<if test="id != null">#{id}, </if>
+			<if test="order != null and order.id != null">#{orderId}, </if>
+			<if test="reason != null ">#{reason}, </if>
+			<if test="auditStatus != null and auditStatus.id!= null">#{auditStatus}, </if>
+			<if test="auditAdmin != null and auditAdmin.id!= null">#{auditAdmin}, </if>
+			<if test="auditDate != null">#{auditDate}, </if>
+			<if test="status != null">#{status}, </if>
+			<if test="createTime != null">#{createTime}, </if>
+			<if test="updateTime != null">#{updateTime}, </if>
+		</trim>
+		)
+	</insert>
+
+	<resultMap id="resultMap" type="OrderRefundRecord">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="reason" javaType="java.lang.String" column="reason"/>
+		<result property="auditDate" javaType="java.util.Date" column="auditDate"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="order" javaType="Order">
+			<id property="id" javaType="java.lang.String" column="orderId"/>
+			<result property="orderNo" javaType="java.lang.String" column="orderNo"/>
+		</association>
+		<association property="auditStatus" javaType="AuditStatus">
+			<id property="id" javaType="java.lang.String" column="auditStatus"/>
+			<result property="text" javaType="java.lang.String" column="auditStatusText"/>
+			<result property="code" javaType="java.lang.String" column="auditStatusCode"/>
+		</association>
+		<association property="auditAdmin" javaType="Admin">
+			<id property="id" javaType="java.lang.String" column="auditAdmin"/>
+			<result property="name" javaType="java.lang.String" column="auditAdminName"/>
+		</association>
+	</resultMap>
+</mapper>

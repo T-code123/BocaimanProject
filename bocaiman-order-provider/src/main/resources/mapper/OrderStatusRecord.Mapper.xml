@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.OrderStatusRecordDao">
+	<select id="findListByQuery" parameterType="OrderStatusRecord" resultMap="resultMap">
+		select
+			sosr.id,
+			sosr.orderId,
+			so.orderNo,
+			sosr.orderStatus,
+			sos.text orderStatusText,
+			sos.code orderStatusCode,
+			sosr.createTime,
+			sosr.updateTime
+		from
+			sys_order_status_record sosr join sys_order so on sosr.orderId=so.id
+			join sys_order_status sos on sosr.orderStatus=sos.id
+
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sosr.id=#{id} and </if>
+				<if test="order != null and order.id != null">sosr.orderId=#{order.id} and </if>
+				<if test="order != null and order.orderNo!= null">so.orderNo=#{order.orderNo} and </if>
+				<if test="orderStatus != null and orderStatus.text!= null">sos.text like concat('%', #{orderStatus.text}, '%') and </if>
+				<if test="orderStatus != null and orderStatus.code!= null">sos.code=#{orderStatus.code} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="OrderStatusRecord">
+		insert into sys_order_status_record(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="order != null and order.id != null">orderId, </if>
+				<if test="orderStatus != null and orderStatus.id != null">orderStatus, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="order != null and order.id != null">#{orderId}, </if>
+				<if test="orderStatus != null and orderStatus.id != null">#{orderStatus}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<resultMap id="resultMap" type="OrderStatusRecord">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="order" javaType="Order">
+			<id property="id" javaType="java.lang.String" column="orderId"/>
+			<result property="orderNo" javaType="java.lang.String" column="orderNo"/>
+		</association>
+		<association property="orderStatus" javaType="OrderStatus">
+			<id property="id" javaType="java.lang.String" column="orderStatus"/>
+			<result property="text" javaType="java.lang.String" column="orderStatusText"/>
+			<result property="code" javaType="java.lang.String" column="orderStatusCode"/>
+		</association>
+
+	</resultMap>
+</mapper>

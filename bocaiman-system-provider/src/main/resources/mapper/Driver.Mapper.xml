@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.DriverDao">
+	<select id="findListByQuery" parameterType="Driver" resultMap="resultMap">
+		select
+			sd.id,
+			sd.admin,
+			sa.name adminName,
+			sa.cellphone adminCellphone,
+			sa.idCard adminIdCard,
+			sd.driverLicense,
+			sd.driverLicenceImage,
+			sd.driverStatus,
+			ss.text driverStatusText,
+			ss.code driverStatusCode,
+			sd.status,
+			sd.createAdmin,
+			sd.createTime,
+			sd.updateAdmin,
+			sd.updateTime
+		from
+			sys_driver sd join sys_admin sa on sd.admin = sa.id
+			join sys_driver_status ss on sd.driverStatus = ss.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sd.id=#{id} and </if>
+				<if test="admin != null and admin.id != null">sd.admin=#{admin.id} and </if>
+				<if test="driverStatus != null and driverStatus.id != null">sd.driverStatus=#{driverStatus.id} and </if>
+				<if test="driverStatus != null and driverStatus.code != null">ss.code=#{driverStatus.code} and </if>
+				<if test="driverStatus != null and driverStatus.text != null">ss.text like concat('%', #{driverStatus.text}, '%') and </if>
+				<if test="status != null">sd.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Driver">
+		insert into sys_driver(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="admin != null and admin.id != null">admin, </if>
+				<if test="driverLicense != null">driverLicense, </if>
+				<if test="driverLicenceImage != null">driverLicenceImage, </if>
+				<if test="driverStatus != null and driverStatus.id != null">driverStatus, </if>
+				<if test="status != null">status, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="admin != null and admin.id != null">#{admin.id}, </if>
+				<if test="driverLicense != null">#{driverLicense}, </if>
+				<if test="driverLicenceImage != null">#{driverLicenceImage}, </if>
+				<if test="driverStatus != null and driverStatus.id != null">#{driverStatus.id}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="Driver">
+		update sys_driver
+		<set>
+			<trim suffixOverrides=",">
+				<if test="admin != null and admin.id != null">admin=#{admin.id}, </if>
+				<if test="driverLicense != null">driverLicense=#{driverLicense}, </if>
+				<if test="driverLicenceImage != null">driverLicenceImage=#{driverLicenceImage}, </if>
+				<if test="driverStatus != null and driverStatus.id != null">driverStatus=#{driverStatus.id}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="Driver">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="driverLicense" javaType="java.lang.String" column="driverLicense"/>
+		<result property="driverLicenceImage" javaType="java.lang.String" column="driverLicenceImage"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="admin" javaType="Admin">
+			<id property="id" javaType="java.lang.String" column="admin"/>
+			<result property="name" javaType="java.lang.String" column="adminName"/>
+			<result property="cellphone" javaType="java.lang.String" column="adminCellphone"/>
+			<result property="idCard" javaType="java.lang.String" column="adminIdCard"/>
+		</association>
+		<association property="driverStatus" javaType="DriverStatus">
+			<id property="id" javaType="java.lang.String" column="driverStatus"/>
+			<result property="text" javaType="java.lang.String" column="driverStatusText"/>
+			<result property="code" javaType="java.lang.String" column="driverStatusCode"/>
+		</association>
+	</resultMap>
+</mapper>

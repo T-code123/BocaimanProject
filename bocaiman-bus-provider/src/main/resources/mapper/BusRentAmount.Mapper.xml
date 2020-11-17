@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.BusRentAmountDao">
+	<select id="findListByQuery" parameterType="BusRentAmount" resultMap="resultMap">
+		select
+			sbr.id,
+			sbr.seat,
+			sbd.name seatName,
+			sbr.category,
+			sbc.name categoryName,
+			sbr.brand,
+			sbs.name brandName,
+			sbr.dailyAmount,
+			sbr.status,
+			sbr.createAdmin,
+			sbr.createTime,
+			sbr.updateAdmin,
+			sbr.updateTime
+		from
+			sys_bus_rentamount sbr join sys_bus_dic sbd on sbr.seat=sbd.id
+			join sys_bus_dic sbc on sbr.category=sbc.id
+			join sys_bus_dic sbs on sbr.brand=sbs.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sbr.id=#{id} and </if>
+				<if test="seat != null and seat.id != null">sbr.seat=#{seat.id} and </if>
+				<if test="category != null and category.id != null">sbr.category=#{category.id} and </if>
+				<if test="brand != null and brand.id != null">sbr.brand=#{brand.id} and </if>
+				<if test="status != null">sbr.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="BusRentAmount">
+		insert into sys_bus_rentamount(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="seat != null and seat.id != null">seat, </if>
+				<if test="category != null and category.id != null">category, </if>
+				<if test="brand != null and brand.id != null">brand, </if>
+				<if test="dailyAmount != null">dailyAmount, </if>
+				<if test="status != null">status, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="seat != null and seat.id != null">#{seat.id}, </if>
+				<if test="category != null and category.id != null">#{category.id}, </if>
+				<if test="brand != null and brand.id != null">#{brand.id}, </if>
+				<if test="dailyAmount != null">#{dailyAmount}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="BusRentAmount">
+		update sys_bus_rentamount
+		<set>
+			<trim suffixOverrides=",">
+				<if test="seat != null and seat.id != null">seat=#{seat.id}, </if>
+				<if test="category != null and category.id != null">category=#{categoryseat.id}, </if>
+				<if test="brand != null and brand.id != null">brand=#{brandseat.id}, </if>
+				<if test="dailyAmount != null">dailyAmount=#{dailyAmount}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="BusRentAmount">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="dailyAmount" javaType="java.math.BigDecimal" column="dailyAmount"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="seat" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="seat"/>
+			<result property="name" javaType="java.lang.String" column="seatName"/>
+		</association>
+		<association property="category" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="category"/>
+			<result property="name" javaType="java.lang.String" column="categoryName"/>
+		</association>
+		<association property="brand" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="brand"/>
+			<result property="name" javaType="java.lang.String" column="brandName"/>
+		</association>
+	</resultMap>
+</mapper>

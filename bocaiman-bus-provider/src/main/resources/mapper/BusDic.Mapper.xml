@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.BusDicDao">
+	<select id="findListByQuery" parameterType="BusDic" resultMap="resultMap">
+		select
+			sbd.id,
+			sbd.parent,
+			sbdp.name parentName,
+			sbd.name,
+			sbd.status,
+			sbd.createAdmin,
+			sbd.createTime,
+			sbd.updateAdmin,
+			sbd.updateTime
+		from
+			sys_bus_dic sbd left join sys_bus_dic sbdp on sbd.parent=sbdp.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sbd.id=#{id} and </if>
+				<if test="parent != null and parent.id != null">sbd.parent=#{parent.id} and </if>
+				<if test="name != null">sbd.name like concat('%', #{name}, '%') and </if>
+				<if test="status != null">sbd.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="BusDic">
+		insert into sys_bus_dic(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="parent != null and parent.id != null">parent, </if>
+				<if test="name != null">name, </if>
+				<if test="status != null">status, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="parent != null and parent.id != null">#{parent.id}, </if>
+				<if test="name != null">#{name}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="BusDic">
+		update sys_bus_dic
+		<set>
+			<trim suffixOverrides=",">
+				<if test="parent != null and parent.id != null">parent=#{parentId}, </if>
+				<if test="name != null">name=#{name}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="BusDic">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="name" javaType="java.lang.String" column="name"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="parent" javaType="BusDic">
+			<id property="id" javaType="java.lang.String" column="parent"/>
+			<result property="name" javaType="java.lang.String" column="parentName"/>
+		</association>
+	</resultMap>
+</mapper>

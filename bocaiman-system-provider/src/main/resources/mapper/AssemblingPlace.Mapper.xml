@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.AssemblingPlaceDao">
+	<select id="findListByQuery" parameterType="AssemblingPlace" resultMap="resultMap">
+		select
+			sap.id,
+			sap.area,
+			sa.parent,
+			sa.text,
+			sa.code,
+			sap.detail,
+			sap.status,
+			sap.createAdmin,
+			sap.createTime,
+			sap.updateAdmin,
+			sap.updateTime
+		from
+			sys_assembling_place sap join sys_area sa on sap.area=sa.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">sap.id=#{id} and </if>
+				<if test="parent != null and parent.id != null">sa.parent=#{parent.id} and </if>
+				<if test="text != null">sa.text like concat('%', #{text}, '%') and </if>
+				<if test="code != null">sa.code=#{code} and </if>
+				<if test="status != null">sap.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="AssemblingPlace">
+		insert into sys_assembling_place(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="parent != null and parent.id != null">parent, </if>
+				<if test="text != null">text, </if>
+				<if test="code != null">code, </if>
+				<if test="status != null">status, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="parent != null and parent.id != null">#{parent.id}, </if>
+				<if test="text != null">#{text}, </if>
+				<if test="code != null">#{code}, </if>
+				<if test="status != null">#{status}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="AssemblingPlace">
+		update sys_assembling_place
+		<set>
+			<trim suffixOverrides=",">
+				<if test="parent != null and parent.id != null">parent=#{parent.id}, </if>
+				<if test="text != null">text=#{text}, </if>
+				<if test="code != null">code=#{code}, </if>
+				<if test="status != null">status=#{status}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="AssemblingPlace">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="detail" javaType="java.lang.String" column="detail"/>
+		<result property="status" javaType="java.lang.Integer" column="status"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="parent" javaType="Area">
+			<id property="id" javaType="java.lang.String" column="parent"/>
+			<result property="text" javaType="java.lang.String" column="text"/>
+			<result property="code" javaType="java.lang.String" column="code"/>
+		</association>
+	</resultMap>
+</mapper>

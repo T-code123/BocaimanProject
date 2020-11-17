@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bocaiman.dao.OrderDao">
+	<select id="findListByQuery" parameterType="Order" resultMap="resultMap">
+		select
+			so.id,
+			so.orderNo,
+			so.travelAgency,
+			st.name travelAgencyName,
+			so.bus,
+			sb.no busNo,
+			so.driver,
+			si.name driverName,
+			si.cellphone driverCellphone,
+			so.linkman,
+			sl.name linkmanName,
+			sl.cellphone linkmanCellphone,
+			so.assemblingPlace,
+			sa.detail,
+			so.startTime,
+			so.expectFinishTime,
+			so.actualFinishTime,
+			so.route,
+			so.dailyAmount,
+			so.discount,
+			so.totalAmount,
+			so.orderCreateDate,
+			so.orderFinishDate,
+			so.orderStatus,
+			su.text orderStatusText,
+			su.code orderStatusCode,
+			so.createTime,
+			so.createAdmin,
+			so.updateTime,
+			so.updateAdmin
+		from
+			sys_order so join sys_travel_agency st on so.travelAgency=st.id
+			join sys_bus sb on so.bus=sb.id
+			join sys_driver sd on so.driver=sd.id
+			join sys_admin si on sd.id=si.id
+			join sys_linkman sl on so.linkman=sl.id
+			join sys_assembling_place sa on so.assemblingPlace= sa.id
+			join sys_order_status su on so.orderStatus= su.id
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">so.id=#{id} and </if>
+				<if test="orderNo != null">so.orderNo=#{orderNo} and </if>
+				<if test="orderStatus != null and orderStatus.id">so.orderStatus=#{orderStatus.id} and </if>
+				<if test="orderStatus != null and orderStatus.text">su.text like concat('%', #{orderStatus.text}, '%') and </if>
+				<if test="orderStatus != null and orderStatus.code">su.code=#{orderStatus.code} and </if>
+				<if test="status != null">so.status=#{status} and </if>
+			</trim>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Order">
+		insert into sys_order(
+			<trim suffixOverrides=",">
+				<if test="id != null">id, </if>
+				<if test="orderNo != null">orderNo, </if>
+				<if test="travelAgency != null and travelAgency.id != null">travelAgency, </if>
+				<if test="bus != null and bus.id != null">bus, </if>
+				<if test="driver != null and driver.id != null">driver, </if>
+				<if test="linkman != null and linkman.id != null">linkman, </if>
+				<if test="assemblingPlace != null and assemblingPlace.id != null">assemblingPlace, </if>
+				<if test="startTime != null">startTime, </if>
+				<if test="expectFinishTime != null">expectFinishTime, </if>
+				<if test="actualFinishTime != null">actualFinishTime, </if>
+				<if test="route != null">route, </if>
+				<if test="dailyAmount != null">dailyAmount, </if>
+				<if test="discount != null">discount, </if>
+				<if test="totalAmount != null">totalAmount, </if>
+				<if test="totalAmount != null">orderCreateDate, </if>
+				<if test="orderFinishDate != null">orderFinishDate, </if>
+				<if test="orderStatus != null and orderStatus.id">orderStatus, </if>
+				<if test="createAdmin != null">createAdmin, </if>
+				<if test="createTime != null">createTime, </if>
+				<if test="updateAdmin != null">updateAdmin, </if>
+				<if test="updateTime != null">updateTime, </if>
+			</trim>
+		) values(
+			<trim suffixOverrides=",">
+				<if test="id != null">#{id}, </if>
+				<if test="orderNo != null">#{orderNo}, </if>
+				<if test="travelAgency != null and travelAgency.id != null">#{travelAgency.id}, </if>
+				<if test="bus != null and bus.id != null">#{bus.id}, </if>
+				<if test="driver != null and driver.id != null">#{driver.id}, </if>
+				<if test="linkman != null and linkman.id != null">#{linkman.id}, </if>
+				<if test="assemblingPlace != null and assemblingPlace.id != null">#{assemblingPlace.id}, </if>
+				<if test="startTime != null">#{startTime}, </if>
+				<if test="expectFinishTime != null">#{expectFinishTime}, </if>
+				<if test="actualFinishTime != null">#{actualFinishTime}, </if>
+				<if test="route != null">#{route}, </if>
+				<if test="dailyAmount != null">#{dailyAmount}, </if>
+				<if test="discount != null">#{discount}, </if>
+				<if test="totalAmount != null">#{totalAmount}, </if>
+				<if test="totalAmount != null">#{orderCreateDate}, </if>
+				<if test="orderFinishDate != null">#{orderFinishDate}, </if>
+				<if test="orderStatus != null and orderStatus.id">#{orderStatus.id}, </if>
+				<if test="createAdmin != null">#{createAdmin}, </if>
+				<if test="createTime != null">#{createTime}, </if>
+				<if test="updateAdmin != null">#{updateAdmin}, </if>
+				<if test="updateTime != null">#{updateTime}, </if>
+			</trim>
+		)
+	</insert>
+
+	<update id="update" parameterType="Order">
+		update sys_order
+		<set>
+			<trim suffixOverrides=",">
+				<if test="travelAgency != null and travelAgency.id != null">travelAgency=#{travelAgency}, </if>
+				<if test="bus != null and bus.id != null">bus=#{bus}, </if>
+				<if test="driver != null and driver.id != null">driver=#{driver}, </if>
+				<if test="linkman != null and linkman.id != null">linkman=#{linkman}, </if>
+				<if test="assemblingPlace != null and assemblingPlace.id != null">assemblingPlace=#{assemblingPlace.id}, </if>
+				<if test="startTime != null">startTime=#{startTime}, </if>
+				<if test="expectFinishTime != null">expectFinishTime=#{expectFinishTime}, </if>
+				<if test="actualFinishTime != null">actualFinishTime=#{actualFinishTime}, </if>
+				<if test="route != null">route=#{route}, </if>
+				<if test="dailyAmount != null">dailyAmount=#{dailyAmount}, </if>
+				<if test="discount != null">discount=#{discount}, </if>
+				<if test="totalAmount != null">totalAmount=#{totalAmount}, </if>
+				<if test="totalAmount != null">orderCreateDate=#{orderCreateDate}, </if>
+				<if test="orderFinishDate != null">orderFinishDate=#{orderFinishDate}, </if>
+				<if test="orderStatus != null and orderStatus.id">orderStatus=#{orderStatus.id}, </if>
+				<if test="createAdmin != null">createAdmin=#{createAdmin}, </if>
+				<if test="createTime != null">createTime=#{createTime}, </if>
+				<if test="updateAdmin != null">updateAdmin=#{updateAdmin}, </if>
+				<if test="updateTime != null">updateTime=#{updateTime}, </if>
+			</trim>
+		</set>
+		<where>
+			<trim suffixOverrides="and">
+				<if test="id != null">id=#{id} and </if>
+				<if test="orderNo != null">orderNo=#{orderNo}, </if>
+			</trim>
+		</where>
+	</update>
+
+	<resultMap id="resultMap" type="Order">
+		<id property="id" javaType="java.lang.String" column="id"/>
+		<result property="orderNo" javaType="java.lang.Integer" column="orderNo"/>
+		<result property="startTime" javaType="java.util.Date" column="startTime"/>
+		<result property="expectFinishTime" javaType="java.util.Date" column="expectFinishTime"/>
+		<result property="actualFinishTime" javaType="java.util.Date" column="actualFinishTime"/>
+		<result property="route" javaType="java.lang.String" column="route"/>
+		<result property="dailyAmount" javaType="java.math.BigDecimal" column="dailyAmount"/>
+		<result property="discount" javaType="java.math.BigDecimal" column="discount"/>
+		<result property="totalAmount" javaType="java.math.BigDecimal" column="totalAmount"/>
+		<result property="orderCreateDate" javaType="java.util.Date" column="orderCreateDate"/>
+		<result property="orderFinishDate" javaType="java.util.Date" column="orderFinishDate"/>
+		<result property="orderStatus" javaType="java.lang.Integer" column="orderStatus"/>
+		<result property="createAdmin" javaType="java.lang.String" column="createAdmin"/>
+		<result property="createTime" javaType="java.util.Date" column="createTime"/>
+		<result property="updateAdmin" javaType="java.lang.String" column="updateAdmin"/>
+		<result property="updateTime" javaType="java.util.Date" column="updateTime"/>
+		<association property="travelAgency" javaType="TravelAgency">
+			<id property="id" javaType="java.lang.String" column="travelAgency"/>
+			<result property="name" javaType="java.lang.String" column="travelAgencyName"/>
+		</association>
+		<association property="bus" javaType="Bus">
+			<id property="id" javaType="java.lang.String" column="bus"/>
+			<result property="no" javaType="java.lang.Integer" column="busNo"/>
+		</association>
+		<association property="driver" javaType="Driver">
+			<id property="id" javaType="java.lang.String" column="driver"/>
+			<result property="name" javaType="java.lang.String" column="driverName"/>
+			<result property="cellphone" javaType="java.lang.String" column="driverCellphone"/>
+		</association>
+		<association property="linkman" javaType="Linkman">
+			<id property="id" javaType="java.lang.String" column="linkman"/>
+			<result property="name" javaType="java.lang.String" column="linkmanName"/>
+			<result property="cellphone" javaType="java.lang.String" column="linkmanCellphone"/>
+		</association>
+		<association property="assemblingPlace" javaType="AssemblingPlace">
+			<id property="id" javaType="java.lang.String" column="assemblingPlace"/>
+			<result property="detail" javaType="java.lang.String" column="detail"/>
+		</association>
+		<association property="orderStatus" javaType="OrderStatus">
+			<id property="id" javaType="java.lang.String" column="orderStatus"/>
+			<result property="text" javaType="java.lang.String" column="orderStatusText"/>
+			<result property="code" javaType="java.lang.String" column="orderStatusCode"/>
+		</association>
+	</resultMap>
+</mapper>
